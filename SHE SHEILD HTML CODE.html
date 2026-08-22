@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SHE-SHIELD — Your Personal Safety, Support &amp; Protection Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ===================== TOKENS ===================== */
+:root{
+  --lav-50:#F8F6FC;
+  --lav-100:#EFE9F9;
+  --lav-200:#E0D5F3;
+  --lav-500:#8B6FD1;
+  --lav-700:#5B3FA0;
+  --lav-900:#2D2148;
+  --coral:#FF6659;
+  --coral-dark:#E14C3F;
+  --ink:#241B36;
+  --ink-soft:#5B5470;
+  --white:#FFFFFF;
+  --success:#3FA796;
+  --success-bg:#E4F5F2;
+  --warn:#D98C2B;
+  --warn-bg:#FBF0DE;
+  --danger-bg:#FDEAE8;
+  --critical:#C43D31;
+  --line:#E4DDF3;
+  --radius:16px;
+  --radius-sm:10px;
+  --font-display:'Manrope',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --shadow:0 4px 20px rgba(91,63,160,0.10);
+  --transition:.2s ease;
+}
+.dark{
+  --lav-50:#1C1630;
+  --lav-100:#241D3B;
+  --lav-200:#332A54;
+  --lav-500:#9C82E0;
+  --lav-700:#B39EEF;
+  --white:#241D3B;
+  --ink:#F2EEFA;
+  --ink-soft:#B8AFD4;
+  --line:#3A3159;
+  --success-bg:#153732;
+  --warn-bg:#3A2E12;
+  --danger-bg:#3A1917;
+  --shadow:0 4px 20px rgba(0,0,0,0.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  background:var(--lav-50);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  transition:background var(--transition), color var(--transition);
+}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;color:var(--ink);}
+p{margin:0;line-height:1.5;}
+button{font-family:var(--font-body);cursor:pointer;border:none;}
+input,textarea,select{font-family:var(--font-body);}
+.mono{font-family:var(--font-mono);}
+a{color:inherit;}
+::selection{background:var(--lav-200);}
+:focus-visible{outline:2px solid var(--lav-700);outline-offset:2px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+.low-power *{animation:none !important; transition:none !important;}
+
+/* ===================== SPLASH ===================== */
+#splash{
+  position:fixed;inset:0;z-index:999;background:var(--lav-700);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;
+  animation:splashOut .6s ease 2.1s forwards;
+}
+#splash .emblem{
+  width:110px;height:110px;
+  animation:splashIn .7s cubic-bezier(.2,.9,.3,1.2) forwards;
+  opacity:0;
+}
+#splash .brand{
+  font-family:var(--font-display);color:#fff;font-weight:800;letter-spacing:.06em;font-size:20px;
+  opacity:0;animation:fadeUp .5s ease .35s forwards;
+}
+@keyframes splashIn{
+  0%{opacity:0; transform:translateY(14px) scale(.85);}
+  60%{opacity:1; transform:translateY(-4px) scale(1.03);}
+  100%{opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+@keyframes splashOut{ from{opacity:1;} to{opacity:0; visibility:hidden; pointer-events:none;} }
+
+/* ===================== SHIELD LOGO (inline, standing in for uploaded asset) ===================== */
+.ss-logo{display:block;}
+
+/* ===================== HEADER ===================== */
+header.topbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:var(--white);
+  border-bottom:1px solid var(--line);
+  gap:10px;
+}
+.brandmark{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;}
+.brandmark .ss-logo{width:34px;height:34px;}
+.brandmark span{font-family:var(--font-display);font-weight:800;font-size:17px;letter-spacing:.03em;color:var(--lav-700);}
+.top-actions{display:flex;align-items:center;gap:8px;}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;background:var(--lav-100);
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--lav-700);
+  transition:transform var(--transition), background var(--transition);
+}
+.icon-btn:active{transform:scale(.92);}
+.sos-pill{
+  display:flex;align-items:center;gap:6px;background:var(--coral);color:#fff;
+  border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px;
+  box-shadow:0 3px 10px rgba(255,102,89,.4);
+  animation:pulseGlow 2.4s ease-in-out infinite;
+}
+.sos-pill:active{transform:scale(.95);}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 3px 10px rgba(255,102,89,.4);}
+  50%{box-shadow:0 3px 22px rgba(255,102,89,.7);}
+}
+
+/* ===================== LAYOUT ===================== */
+main{max-width:640px;margin:0 auto;padding:20px 16px 100px;}
+.hero{padding:18px 4px 8px;}
+.hero .eyebrow{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lav-500);margin-bottom:6px;display:block;
+}
+.hero h1{font-size:28px;line-height:1.15;}
+.hero p.tagline{color:var(--ink-soft);margin-top:6px;font-size:15px;}
+
+.section-label{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--lav-700);margin:26px 2px 10px;display:flex;align-items:center;gap:8px;
+}
+.section-label::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:480px){.grid{grid-template-columns:repeat(3,1fr);}}
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;
+  text-align:left;transition:transform var(--transition), box-shadow var(--transition);
+  min-height:98px; justify-content:space-between;
+}
+.card:active{transform:scale(.97);}
+.card:hover{box-shadow:var(--shadow);}
+.card .emoji{font-size:22px;}
+.card .label{font-weight:700;font-size:13px;line-height:1.25;color:var(--ink);}
+.card.emergency{background:var(--coral);border-color:var(--coral);}
+.card.emergency .label{color:#fff;}
+.card.priority{background:var(--lav-700);border-color:var(--lav-700);}
+.card.priority .label{color:#fff;}
+
+/* ===================== SCREENS ===================== */
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp .25s ease;}
+.screen-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;background:var(--lav-100);color:var(--lav-700);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.screen-header h2{font-size:20px;}
+.screen-header .sub{color:var(--ink-soft);font-size:13px;margin-top:2px;}
+
+.card-panel{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;margin-bottom:14px;
+}
+.btn{
+  border-radius:999px;padding:13px 20px;font-weight:700;font-size:14px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform var(--transition);
+}
+.btn:active{transform:scale(.96);}
+.btn-primary{background:var(--lav-700);color:#fff;width:100%;}
+.btn-coral{background:var(--coral);color:#fff;width:100%;}
+.btn-coral:hover{background:var(--coral-dark);}
+.btn-outline{background:transparent;color:var(--lav-700);border:1.5px solid var(--lav-700);width:100%;}
+.btn-ghost{background:var(--lav-100);color:var(--lav-700);width:100%;}
+.btn-sm{padding:9px 14px;font-size:13px;width:auto;}
+.btn-row{display:flex;gap:10px;margin-top:10px;}
+.btn-row .btn{flex:1;}
+.btn:disabled{opacity:.45;pointer-events:none;}
+
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+.field input[type=text],.field input[type=tel],.field input[type=date],.field input[type=time],
+.field input[type=number],.field select,.field textarea{
+  width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--lav-50);color:var(--ink);font-size:14px;
+}
+.field textarea{min-height:90px;resize:vertical;}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  padding:8px 14px;border-radius:999px;background:var(--lav-100);color:var(--lav-700);
+  font-size:13px;font-weight:600;border:1.5px solid transparent;
+}
+.chip.active{background:var(--lav-700);color:#fff;}
+
+.status-line{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);}
+.status-line:last-child{border-bottom:none;}
+.status-line .left{display:flex;align-items:center;gap:10px;font-size:14px;}
+.badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;font-family:var(--font-mono);}
+.badge.ok{background:var(--success-bg);color:var(--success);}
+.badge.warn{background:var(--warn-bg);color:var(--warn);}
+.badge.off{background:var(--danger-bg);color:var(--critical);}
+
+.notice{
+  border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:14px;
+}
+.notice.info{background:var(--lav-100);color:var(--lav-700);}
+.notice.warn{background:var(--warn-bg);color:var(--warn);}
+.notice.danger{background:var(--danger-bg);color:var(--critical);}
+.notice.ok{background:var(--success-bg);color:var(--success);}
+
+.big-countdown{
+  font-family:var(--font-mono);font-size:88px;text-align:center;font-weight:600;color:var(--coral);
+  margin:14px 0;line-height:1;
+}
+.list-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:13px 0;border-bottom:1px solid var(--line);
+}
+.list-item:last-child{border-bottom:none;}
+.list-item .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+.icon-action{background:none;color:var(--ink-soft);font-size:16px;padding:6px;}
+.icon-action.danger{color:var(--critical);}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.gallery .thumb{position:relative;border-radius:var(--radius-sm);overflow:hidden;background:var(--lav-100);aspect-ratio:1;}
+.gallery .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.gallery .thumb .del{position:absolute;top:4px;right:4px;background:rgba(36,27,54,.65);color:#fff;border-radius:50%;width:22px;height:22px;font-size:12px;}
+
+video#camPreview{width:100%;border-radius:var(--radius-sm);background:#000;max-height:340px;object-fit:cover;}
+canvas{display:none;}
+
+.svi-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin:8px 0 16px;}
+.svi-score{font-family:var(--font-mono);font-size:46px;font-weight:600;}
+.risk-tag{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;padding:6px 16px;border-radius:999px;font-weight:700;}
+.risk-tag.LOW{background:var(--success-bg);color:var(--success);}
+.risk-tag.MODERATE{background:var(--warn-bg);color:var(--warn);}
+.risk-tag.HIGH{background:#FCE3D9;color:#C25A2A;}
+.risk-tag.CRITICAL{background:var(--danger-bg);color:var(--critical);}
+
+.chat-wrap{display:flex;flex-direction:column;gap:10px;max-height:52vh;overflow-y:auto;margin-bottom:12px;padding:4px;}
+.msg{max-width:82%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.45;}
+.msg.bot{background:var(--lav-100);color:var(--ink);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg.user{background:var(--lav-700);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input-row input{flex:1;}
+
+.call-screen{
+  position:fixed;inset:0;background:var(--lav-900);z-index:900;color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 24px;
+}
+.call-screen .avatar{width:104px;height:104px;border-radius:50%;background:var(--lav-500);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;font-family:var(--font-display);}
+.call-buttons{display:flex;gap:60px;}
+.call-btn{width:64px;height:64px;border-radius:50%;font-size:24px;color:#fff;display:flex;align-items:center;justify-content:center;}
+.call-btn.accept{background:var(--success);}
+.call-btn.decline{background:var(--coral);}
+
+.tips-block{margin-bottom:16px;}
+.tips-block h4{font-size:14.5px;margin-bottom:6px;color:var(--lav-700);}
+.tips-block ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65;color:var(--ink);}
+
+.emergency-banner{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--coral);color:#fff;
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  box-shadow:0 -6px 18px rgba(0,0,0,.15);
+}
+.emergency-banner .txt{font-weight:700;font-size:13px;}
+.emergency-banner button{background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:700;}
+
+.lang-select{padding:8px 10px;border-radius:var(--radius-sm);border:1.5px solid var(--line);background:var(--white);color:var(--ink);font-size:13px;}
+
+.consent-box{text-align:center;padding:30px 10px 10px;}
+.consent-box .glyph{font-size:44px;margin-bottom:14px;}
+
+footer.disclaimer{margin-top:30px;padding:14px;font-size:11.5px;color:var(--ink-soft);text-align:center;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- ===================== SPLASH ===================== -->
+<div id="splash">
+  <svg class="emblem" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="58" fill="#ffffff" fill-opacity="0.08"/>
+    <circle cx="60" cy="60" r="46" fill="#ffffff"/>
+    <path d="M60 28 L86 38 V60 C86 78 75 90 60 96 C45 90 34 78 34 60 V38 Z" fill="#5B3FA0"/>
+    <path d="M50 60 L57 67 L72 50" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+  <div class="brand">SHE-SHIELD</div>
+</div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="topbar">
+  <button class="brandmark" onclick="Router.go('home')" aria-label="Home">
+    <svg class="ss-logo" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="58" fill="var(--lav-100)"/>
+      <path d="M60 28 L86 38 V60 C86 78 75 90 60 96 C45 90 34 78 34 60 V38 Z" fill="var(--lav-700)"/>
+      <path d="M50 60 L57 67 L72 50" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span>SHE-SHIELD</span>
+  </button>
+  <div class="top-actions">
+    <button class="icon-btn" id="nightToggle" onclick="App.toggleNight()" aria-label="Toggle night mode">🌙</button>
+    <button class="sos-pill" onclick="Router.go('sos')">🚨 SOS</button>
+  </div>
+</header>
+
+<main id="app-main">
+
+  <!-- ===================== HOME ===================== -->
+  <section class="screen active" id="screen-home">
+    <div class="hero">
+      <span class="eyebrow mono">Prototype · SIH 2026 · PS26093</span>
+      <h1>SHE-SHIELD</h1>
+      <p class="tagline">Your Personal Safety, Support &amp; Protection Companion</p>
+    </div>
+
+    <div class="section-label">Quick Actions</div>
+    <div class="grid" id="grid-emergency"></div>
+
+    <div class="section-label">AI Safety &amp; Support</div>
+    <div class="grid" id="grid-ai"></div>
+
+    <div class="section-label">Safety Tools</div>
+    <div class="grid" id="grid-tools"></div>
+
+    <footer class="disclaimer">
+      SHE-SHIELD is a hackathon prototype built for SIH 2026, problem statement SIH26093 (Ministry of Social Justice &amp; Empowerment). AI features provide a risk/vulnerability <strong>assessment and support recommendation only — not a medical diagnosis.</strong> All data in this demo is stored locally in your browser and is not transmitted anywhere without your explicit action.
+    </footer>
+  </section>
+
+  <!-- ===================== EMERGENCY SOS ===================== -->
+  <section class="screen" id="screen-sos">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🚨 Emergency SOS</h2><div class="sub">Full emergency workflow with location &amp; contacts</div></div>
+    </div>
+    <div id="sos-idle">
+      <div class="notice info">Pressing Activate will attempt to get your location and prepare an emergency message you can instantly share via WhatsApp, SMS, call, or the share sheet.</div>
+      <button class="btn btn-coral" onclick="SOS.activate('EMERGENCY')">Activate Emergency SOS</button>
+    </div>
+    <div id="sos-active" style="display:none;"></div>
+  </section>
+
+  <!-- ===================== SILENT SOS ===================== -->
+  <section class="screen" id="screen-silent">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🔇 Silent SOS</h2><div class="sub">Same emergency workflow, no sound, discreet UI</div></div>
+    </div>
+    <div id="silent-idle">
+      <div class="notice info">This activates the same emergency workflow without any siren or audible alert. Screen stays understated.</div>
+      <button class="btn btn-ghost" style="background:var(--lav-700);color:#fff;" onclick="SOS.activate('SILENT')">Activate Silently</button>
+    </div>
+    <div id="silent-active" style="display:none;"></div>
+  </section>
+
+  <!-- ===================== VOICE SOS / CODE WORD ===================== -->
+  <section class="screen" id="screen-voice">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🎤 Voice SOS &amp; Code Word</h2><div class="sub">Say your code word to trigger SOS hands-free</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="field">
+        <label>Active emergency code word</label>
+        <input type="text" id="codewordInput" placeholder="e.g. AMMA">
+      </div>
+      <button class="btn btn-outline" onclick="Voice.saveCodeword()">Save Code Word</button>
+      <p style="margin-top:10px;font-size:12.5px;color:var(--ink-soft);">Default phrase is always <strong>"HELP ME"</strong>. Your custom word is currently: <strong id="codewordDisplay" class="mono">—</strong></p>
+    </div>
+    <div class="card-panel" id="voice-status-panel">
+      <div id="voice-support-msg" class="notice info">Checking speech recognition support…</div>
+      <button class="btn btn-primary" id="voiceStartBtn" onclick="Voice.start()">Start Listening</button>
+      <button class="btn btn-outline" id="voiceStopBtn" style="display:none;margin-top:10px;" onclick="Voice.stop()">Stop Listening</button>
+      <div id="voice-transcript" class="notice" style="display:none;margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- ===================== AUTO SOS COUNTDOWN ===================== -->
+  <section class="screen" id="screen-countdown">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>⏱ Auto SOS Countdown</h2><div class="sub">SOS triggers automatically unless cancelled</div></div>
+    </div>
+    <div id="countdown-setup">
+      <div class="chip-row" id="countdown-chips">
+        <button class="chip active" data-sec="5" onclick="Countdown.select(5,this)">5s</button>
+        <button class="chip" data-sec="10" onclick="Countdown.select(10,this)">10s</button>
+        <button class="chip" data-sec="15" onclick="Countdown.select(15,this)">15s</button>
+        <button class="chip" data-sec="30" onclick="Countdown.select(30,this)">30s</button>
+      </div>
+      <button class="btn btn-coral" style="margin-top:18px;" onclick="Countdown.start()">Start Countdown</button>
+    </div>
+    <div id="countdown-running" style="display:none;text-align:center;">
+      <p class="mono" style="color:var(--ink-soft);letter-spacing:.1em;">SOS ACTIVATES IN</p>
+      <div class="big-countdown" id="countdown-number">10</div>
+      <button class="btn btn-outline" style="border-color:var(--coral);color:var(--coral);" onclick="Countdown.cancel()">CANCEL SOS</button>
+    </div>
+    <div id="countdown-fired" style="display:none;"></div>
+  </section>
+
+  <!-- ===================== SHARE LOCATION ===================== -->
+  <section class="screen" id="screen-location">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>📍 Share Location</h2><div class="sub">Uses your device's real GPS via the browser</div></div>
+    </div>
+    <div class="card-panel">
+      <button class="btn btn-primary" onclick="Loc.fetch()">Get Current Location</button>
+      <div id="loc-result" style="margin-top:14px;"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SIREN ===================== -->
+  <section class="screen" id="screen-siren">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🚨 Siren Alarm</h2><div class="sub">Loud audio alert to attract attention</div></div>
+    </div>
+    <div class="card-panel" style="text-align:center;">
+      <button class="btn btn-coral" id="sirenOnBtn" onclick="Siren.start()">Activate Siren</button>
+      <button class="btn btn-outline" id="sirenOffBtn" style="display:none;margin-top:10px;" onclick="Siren.stop()">Stop Siren</button>
+    </div>
+  </section>
+
+  <!-- ===================== CAMERA / EVIDENCE CAPTURE ===================== -->
+  <section class="screen" id="screen-camera">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>📷 Evidence Capture</h2><div class="sub">Photo evidence saved privately in this browser</div></div>
+    </div>
+    <div class="card-panel">
+      <div id="cam-area">
+        <video id="camPreview" autoplay playsinline muted style="display:none;"></video>
+        <canvas id="camCanvas"></canvas>
+        <div id="cam-placeholder" class="notice info">Camera preview will appear here once access is granted.</div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="Cam.open()">Open Camera</button>
+          <button class="btn btn-outline" onclick="Cam.flip()">Flip Camera</button>
+        </div>
+        <button class="btn btn-coral" id="captureBtn" style="display:none;margin-top:10px;" onclick="Cam.capture()">Capture Evidence</button>
+        <label class="btn btn-ghost" style="margin-top:10px;display:block;text-align:center;">
+          Upload Existing File Instead
+          <input type="file" accept="image/*" style="display:none;" onchange="Cam.upload(event)">
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EVIDENCE HISTORY ===================== -->
+  <section class="screen" id="screen-evidence">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🗂 Evidence History</h2><div class="sub">Stored locally on this device only</div></div>
+    </div>
+    <div class="gallery" id="evidence-gallery"></div>
+    <p id="evidence-empty" class="notice info" style="display:none;">No evidence captured yet.</p>
+  </section>
+
+  <!-- ===================== SAFE JOURNEY ===================== -->
+  <section class="screen" id="screen-journey">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🧭 Safe Journey</h2><div class="sub">Share your journey with trusted contacts</div></div>
+    </div>
+    <div id="journey-setup" class="card-panel">
+      <div class="field"><label>Destination</label><input type="text" id="jDest" placeholder="e.g. Home"></div>
+      <div class="field"><label>Expected duration (minutes)</label><input type="number" id="jDuration" placeholder="30"></div>
+      <div class="notice info">Location updates only while this tab stays open — browsers block background tracking after a page is closed.</div>
+      <button class="btn btn-primary" onclick="Journey.start()">Start Journey</button>
+    </div>
+    <div id="journey-active" style="display:none;"></div>
+  </section>
+
+  <!-- ===================== FAKE CALL ===================== -->
+  <section class="screen" id="screen-fakecall">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>📞 Fake Call</h2><div class="sub">Simulated incoming call, useful to exit a situation</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="field"><label>Caller name</label><input type="text" id="fakeCallerName" value="Mom"></div>
+      <div class="field"><label>Ring after (seconds)</label><input type="number" id="fakeCallDelay" value="3"></div>
+      <button class="btn btn-primary" onclick="FakeCall.schedule()">Start Simulated Call</button>
+      <p style="margin-top:10px;font-size:12px;color:var(--ink-soft);">This is a UI simulation only — no real call is placed.</p>
+    </div>
+  </section>
+
+  <!-- ===================== HELPLINES ===================== -->
+  <section class="screen" id="screen-helplines">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>☎️ Emergency Helplines</h2><div class="sub">Configurable — insert verified official numbers</div></div>
+    </div>
+    <div class="card-panel" id="helplines-list"></div>
+  </section>
+
+  <!-- ===================== AI STRESS & TRAUMA ASSESSMENT ===================== -->
+  <section class="screen" id="screen-assess">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🧠 AI Stress &amp; Trauma Assessment</h2><div class="sub">Prototype AI Assessment · PS26093</div></div>
+    </div>
+
+    <div id="assess-consent" class="card-panel consent-box">
+      <div class="glyph">🔒</div>
+      <h3 style="margin-bottom:10px;">Your privacy matters</h3>
+      <p style="color:var(--ink-soft);font-size:14px;">This assessment is designed to identify stress and vulnerability indicators and provide support recommendations. <strong>It is not a medical diagnosis.</strong> Your responses stay in this browser and are never sent anywhere without your action.</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-outline" onclick="Router.go('home')">Cancel</button>
+        <button class="btn btn-primary" onclick="Assess.consent()">I Consent &amp; Continue</button>
+      </div>
+    </div>
+
+    <div id="assess-mode" style="display:none;">
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="Assess.startText()">A. Text Assessment</button>
+        <button class="btn btn-outline" onclick="Assess.startVoice()">B. Voice Assessment</button>
+      </div>
+    </div>
+
+    <div id="assess-questions" style="display:none;"></div>
+    <div id="assess-voice-panel" style="display:none;"></div>
+    <div id="assess-result" style="display:none;"></div>
+  </section>
+
+  <!-- ===================== AI SAFETY ASSISTANT ===================== -->
+  <section class="screen" id="screen-assistant">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🤖 AI Safety Assistant</h2><div class="sub">Rule-based prototype assistant</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="chat-wrap" id="chatWrap"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Ask about your safety…" onkeydown="if(event.key==='Enter')Assistant.send();">
+        <button class="btn btn-primary btn-sm" onclick="Assistant.send()">Send</button>
+      </div>
+      <button class="btn btn-coral" style="margin-top:10px;" onclick="Router.go('sos')">🚨 Emergency SOS Shortcut</button>
+    </div>
+  </section>
+
+  <!-- ===================== SELF DEFENSE TIPS ===================== -->
+  <section class="screen" id="screen-tips">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🛡 Self-Defense Tips</h2></div>
+    </div>
+    <div class="card-panel" id="tips-content"></div>
+  </section>
+
+  <!-- ===================== INCIDENT REPORT ===================== -->
+  <section class="screen" id="screen-incident">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>📋 Incident Report</h2><div class="sub">Saved locally in this prototype</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="field"><label>Date</label><input type="date" id="incDate"></div>
+      <div class="field"><label>Time</label><input type="time" id="incTime"></div>
+      <div class="field"><label>Location</label><input type="text" id="incLocation" placeholder="Where did this happen?"></div>
+      <div class="field"><label>Category</label>
+        <select id="incCategory">
+          <option>Harassment</option><option>Stalking</option><option>Threat / Intimidation</option>
+          <option>Assault</option><option>Cyber Harassment</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Description</label><textarea id="incDesc" placeholder="Describe what happened…"></textarea></div>
+      <div class="field"><label>Additional notes</label><textarea id="incNotes"></textarea></div>
+      <button class="btn btn-primary" onclick="Incident.save()">Save Report</button>
+      <div id="incident-success" class="notice ok" style="display:none;margin-top:12px;">Report saved successfully.</div>
+    </div>
+    <div class="card-panel" id="incident-list"></div>
+  </section>
+
+  <!-- ===================== EMERGENCY CONTACTS ===================== -->
+  <section class="screen" id="screen-contacts">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>👥 Emergency Contacts</h2><div class="sub">Stored locally, not equivalent to secure cloud backup</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="field"><label>Name</label><input type="text" id="cName"></div>
+      <div class="field"><label>Phone number</label><input type="tel" id="cPhone"></div>
+      <div class="field"><label>Relationship</label><input type="text" id="cRel" placeholder="e.g. Sister"></div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:12px;">
+        <input type="checkbox" id="cTrusted"> Mark as trusted contact
+      </label>
+      <button class="btn btn-primary" onclick="Contacts.add()">Add Contact</button>
+    </div>
+    <div class="card-panel" id="contacts-list"></div>
+  </section>
+
+  <!-- ===================== BATTERY SAVER ===================== -->
+  <section class="screen" id="screen-battery">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🔋 Battery Saver SOS</h2><div class="sub">Low Power Safety Mode — reduces UI activity, prioritizes SOS</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="notice info">Browsers cannot change your phone's actual battery settings. This toggles a lightweight app mode that trims animation and prioritizes SOS + location.</div>
+      <div id="battery-status" class="mono" style="margin-bottom:14px;"></div>
+      <button class="btn btn-primary" id="lowPowerBtn" onclick="Battery.toggle()">Enable Low Power Safety Mode</button>
+    </div>
+  </section>
+
+  <!-- ===================== OFFLINE SOS DRAFT ===================== -->
+  <section class="screen" id="screen-offline">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>📡 Offline SOS Draft</h2><div class="sub">Prepare an emergency message to send once you're back online</div></div>
+    </div>
+    <div class="card-panel">
+      <div id="offline-net-status" class="notice"></div>
+      <div class="field"><label>Emergency message</label><textarea id="offlineMsg" placeholder="I need help. My situation is…"></textarea></div>
+      <button class="btn btn-primary" onclick="OfflineDraft.save()">Save Draft Locally</button>
+    </div>
+    <div class="card-panel" id="offline-draft-view"></div>
+  </section>
+
+  <!-- ===================== TRUSTED ZONE ===================== -->
+  <section class="screen" id="screen-zone">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🏠 Trusted Zone</h2><div class="sub">Define safe places like Home, College or Work</div></div>
+    </div>
+    <div class="card-panel">
+      <div class="field"><label>Zone name</label><input type="text" id="zoneName" placeholder="e.g. Home"></div>
+      <div class="field"><label>Radius (meters)</label><input type="number" id="zoneRadius" value="150"></div>
+      <button class="btn btn-primary" onclick="Zone.saveCurrent()">Save Current Location as Zone</button>
+      <div id="zone-check-result" style="margin-top:12px;"></div>
+    </div>
+    <div class="card-panel" id="zone-list"></div>
+  </section>
+
+  <!-- ===================== NIGHT MODE ===================== -->
+  <section class="screen" id="screen-night">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🌙 Night Mode</h2></div>
+    </div>
+    <div class="card-panel">
+      <p style="margin-bottom:14px;font-size:14px;color:var(--ink-soft);">Switch the whole app between Light Mode and Night Mode. Your preference is remembered on this device.</p>
+      <button class="btn btn-primary" onclick="App.toggleNight()">Toggle Night Mode</button>
+    </div>
+  </section>
+
+  <!-- ===================== COMMAND CENTER ===================== -->
+  <section class="screen" id="screen-command">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>🛡 Emergency Command Center</h2><div class="sub">Live safety dashboard</div></div>
+    </div>
+    <div class="card-panel" id="command-content"></div>
+  </section>
+
+  <!-- ===================== STATUS / PERMISSION CENTER ===================== -->
+  <section class="screen" id="screen-status">
+    <div class="screen-header">
+      <button class="back-btn" onclick="Router.go('home')">←</button>
+      <div><h2>Status &amp; Permission Center</h2></div>
+    </div>
+    <div class="card-panel" id="status-content"></div>
+  </section>
+
+</main>
+
+<div id="emergencyBanner" style="display:none;"></div>
+<div id="fakeCallOverlay"></div>
+
+<script>
+/* =====================================================================
+   SHE-SHIELD prototype — vanilla JS, no build step.
+   Real browser APIs are used where supported; every feature degrades
+   to a clearly-labelled fallback rather than pretending to work.
+   All persistence uses localStorage, scoped to this browser only.
+===================================================================== */
+
+/* ---------- tiny storage helpers ---------- */
+const Store = {
+  get(k, fallback){ try{ const v = localStorage.getItem(k); return v? JSON.parse(v): fallback; }catch(e){ return fallback; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.warn('storage failed', e); } }
+};
+
+/* ---------- Router ---------- */
+const Router = {
+  go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    const el = document.getElementById('screen-'+id);
+    if(el){ el.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+    if(id==='helplines') Helplines.render();
+    if(id==='evidence') Evidence.render();
+    if(id==='contacts') Contacts.render();
+    if(id==='incident') Incident.render();
+    if(id==='tips') Tips.render();
+    if(id==='command') Command.render();
+    if(id==='status') Status.render();
+    if(id==='zone') Zone.render();
+    if(id==='offline') OfflineDraft.render();
+    if(id==='battery') Battery.render();
+    if(id==='voice') Voice.render();
+    if(id==='assistant' && !Assistant.started) Assistant.init();
+    if(id==='sos'){ document.getElementById('sos-idle').style.display='block'; document.getElementById('sos-active').style.display='none'; }
+    if(id==='silent'){ document.getElementById('silent-idle').style.display='block'; document.getElementById('silent-active').style.display='none'; }
+  }
+};
+
+/* ---------- App-level (night mode, low power) ---------- */
+const App = {
+  init(){
+    if(Store.get('ss_nightmode', false)){ document.documentElement.classList.add('dark'); document.getElementById('nightToggle').textContent='☀️'; }
+    if(Store.get('ss_lowpower', false)){ document.body.classList.add('low-power'); }
+    Home.renderGrids();
+    setTimeout(()=>{ const s=document.getElementById('splash'); if(s) s.remove(); }, 2800);
+    window.addEventListener('online', ()=>OfflineDraft.onNetworkChange(true));
+    window.addEventListener('offline', ()=>OfflineDraft.onNetworkChange(false));
+  },
+  toggleNight(){
+    const isDark = document.documentElement.classList.toggle('dark');
+    Store.set('ss_nightmode', isDark);
+    document.getElementById('nightToggle').textContent = isDark? '☀️' : '🌙';
+  }
+};
+
+/* ---------- Home grids (exact spec order) ---------- */
+const Home = {
+  emergency:[
+    {id:'sos', icon:'🚨', label:'Emergency SOS', cls:'emergency'},
+    {id:'silent', icon:'🔇', label:'Silent SOS'},
+    {id:'voice', icon:'🎤', label:'Voice SOS'},
+    {id:'countdown', icon:'⏱', label:'Auto SOS Countdown'},
+    {id:'location', icon:'📍', label:'Share Location'},
+    {id:'siren', icon:'📢', label:'Siren Alarm'},
+    {id:'camera', icon:'📷', label:'Evidence Capture'},
+    {id:'journey', icon:'🧭', label:'Safe Journey'},
+    {id:'fakecall', icon:'📞', label:'Fake Call'},
+    {id:'helplines', icon:'☎️', label:'Emergency Helplines'},
+  ],
+  ai:[
+    {id:'assess', icon:'🧠', label:'AI Stress & Trauma Assessment', cls:'priority'},
+    {id:'assistant', icon:'🤖', label:'AI Safety Assistant'},
+    {id:'voice', icon:'🗣', label:'Voice Code Word / AMMA'},
+    {id:'incident', icon:'📋', label:'Incident Report'},
+    {id:'tips', icon:'🛡', label:'Self-Defense Tips'},
+  ],
+  tools:[
+    {id:'contacts', icon:'👥', label:'Emergency Contacts'},
+    {id:'battery', icon:'🔋', label:'Battery Saver SOS'},
+    {id:'offline', icon:'📡', label:'Offline SOS Draft'},
+    {id:'zone', icon:'🏠', label:'Trusted Zone'},
+    {id:'night', icon:'🌙', label:'Night Mode'},
+    {id:'evidence', icon:'🗂', label:'Evidence History'},
+    {id:'command', icon:'🛡', label:'Emergency Command Center'},
+  ],
+  renderGrids(){
+    const build = (arr)=> arr.map(c=>`
+      <button class="card ${c.cls||''}" onclick="Router.go('${c.id}')">
+        <span class="emoji">${c.icon}</span>
+        <span class="label">${c.label}</span>
+      </button>`).join('');
+    document.getElementById('grid-emergency').innerHTML = build(this.emergency);
+    document.getElementById('grid-ai').innerHTML = build(this.ai);
+    document.getElementById('grid-tools').innerHTML = build(this.tools);
+  }
+};
+
+/* ---------- Geolocation helper ---------- */
+function getLocation(onOk, onErr){
+  if(!('geolocation' in navigator)){ onErr && onErr({message:'Geolocation is not supported by this browser.'}); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => onOk(pos),
+    err => onErr && onErr(err),
+    {enableHighAccuracy:true, timeout:10000, maximumAge:0}
+  );
+}
+
+/* ---------- Share / copy helper ---------- */
+async function shareOrCopy(text, title){
+  if(navigator.share){
+    try{ await navigator.share({title: title||'SHE-SHIELD Emergency', text}); return 'shared'; }
+    catch(e){ /* user cancelled or unsupported — fall through to copy */ }
+  }
+  try{ await navigator.clipboard.writeText(text); return 'copied'; }
+  catch(e){ return 'manual'; }
+}
+
+/* =====================================================================
+   EMERGENCY SOS / SILENT SOS
+===================================================================== */
+const SOS = {
+  activate(mode){
+    const wrap = document.getElementById(mode==='SILENT' ? 'silent-active' : 'sos-active');
+    document.getElementById(mode==='SILENT' ? 'silent-idle' : 'sos-idle').style.display='none';
+    wrap.style.display='block';
+    wrap.innerHTML = `<div class="notice ${mode==='SILENT'?'info':'danger'}"><strong>EMERGENCY MODE ACTIVE</strong><br>Getting your location…</div>`;
+
+    getLocation(pos=>{
+      const {latitude, longitude, accuracy} = pos.coords;
+      const mapLink = `https://maps.google.com/?q=${latitude},${longitude}`;
+      const ts = new Date().toLocaleString();
+      const message = `EMERGENCY: I need help. My status: emergency activated via SHE-SHIELD.\nLocation: ${mapLink} (±${Math.round(accuracy)}m)\nTime: ${ts}`;
+      Command.log('sos', mode);
+      this.renderActive(wrap, message, mapLink, ts, mode);
+    }, err=>{
+      const ts = new Date().toLocaleString();
+      const message = `EMERGENCY: I need help. My status: emergency activated via SHE-SHIELD.\nLocation unavailable (${err.message||'permission denied'}).\nTime: ${ts}`;
+      Command.log('sos', mode);
+      this.renderActive(wrap, message, null, ts, mode, true);
+    });
+  },
+  renderActive(wrap, message, mapLink, ts, mode, locFailed){
+    const contacts = Store.get('ss_contacts', []).filter(c=>c.trusted);
+    wrap.innerHTML = `
+      <div class="notice ${mode==='SILENT'?'info':'danger'}"><strong>EMERGENCY MODE ACTIVE</strong> — ${mode==='SILENT'?'Silent, discreet mode.':'Loud mode.'}</div>
+      ${locFailed? `<div class="notice warn">Location could not be retrieved. Message sent without coordinates.</div>` : ''}
+      <div class="card-panel">
+        <label style="font-size:12px;color:var(--ink-soft);">Prepared emergency message</label>
+        <div class="notice info mono" style="white-space:pre-wrap;margin-top:8px;">${message}</div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick='SOS.share(${JSON.stringify(message)})'>Share / Send</button>
+          <button class="btn btn-outline" onclick='SOS.copy(${JSON.stringify(message)})'>Copy Message</button>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-ghost" href="https://wa.me/?text=${encodeURIComponent(message)}" target="_blank" rel="noopener">Open WhatsApp</a>
+          <a class="btn btn-ghost" href="sms:?body=${encodeURIComponent(message)}">Open SMS</a>
+        </div>
+      </div>
+      <div class="card-panel">
+        <label style="font-size:12px;color:var(--ink-soft);">Trusted contacts</label>
+        ${contacts.length? contacts.map(c=>`
+          <div class="list-item">
+            <div><strong>${c.name}</strong><div class="meta">${c.relationship||''}</div></div>
+            <a class="btn btn-sm btn-ghost" href="tel:${c.phone}">Call</a>
+          </div>`).join('') : `<p class="notice info" style="margin-top:8px;">No trusted contacts saved yet. Add some in Emergency Contacts.</p>`}
+      </div>
+      ${mode!=='SILENT' ? `<button class="btn btn-outline" onclick="Router.go('siren')">Also activate Siren Alarm</button>` : ''}
+    `;
+  },
+  async share(message){ const r = await shareOrCopy(message,'SHE-SHIELD Emergency'); if(r==='copied') alert('Sharing isn\'t available — message copied to clipboard instead.'); if(r==='manual') alert('Please copy the message manually to share it.'); },
+  async copy(message){ const r = await shareOrCopy(message); alert(r==='shared'?'Shared.':'Message copied to clipboard.'); }
+};
+
+/* =====================================================================
+   VOICE SOS + CODE WORD
+===================================================================== */
+const Voice = {
+  recognition:null, listening:false,
+  render(){
+    const cw = Store.get('ss_codeword','AMMA');
+    document.getElementById('codewordInput').value='';
+    document.getElementById('codewordDisplay').textContent = cw;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const msg = document.getElementById('voice-support-msg');
+    if(!SR){
+      msg.className='notice warn';
+      msg.textContent = 'Speech recognition is not supported in this browser. Try Chrome on Android/desktop. You can still use text-based features.';
+      document.getElementById('voiceStartBtn').disabled = true;
+    } else {
+      msg.className='notice info';
+      msg.textContent = 'Speech recognition is supported. Tap Start Listening and grant microphone access, then say your code word or "HELP ME".';
+      document.getElementById('voiceStartBtn').disabled = false;
+    }
+  },
+  saveCodeword(){
+    const v = document.getElementById('codewordInput').value.trim().toUpperCase();
+    if(!v){ alert('Enter a word first.'); return; }
+    Store.set('ss_codeword', v);
+    this.render();
+  },
+  start(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return;
+    const rec = new SR();
+    rec.continuous = true; rec.interimResults = true; rec.lang = 'en-IN';
+    const cw = Store.get('ss_codeword','AMMA').toLowerCase();
+    const t = document.getElementById('voice-transcript');
+    t.style.display='block';
+    rec.onstart = ()=>{ this.listening=true; document.getElementById('voiceStartBtn').style.display='none'; document.getElementById('voiceStopBtn').style.display='block'; t.className='notice info'; t.textContent='Listening…'; };
+    rec.onerror = (e)=>{ t.className='notice warn'; t.textContent = 'Recognition error: '+e.error+'. '+(e.error==='not-allowed'?'Microphone permission was denied — enable it in browser site settings.':''); this.stop(); };
+    rec.onend = ()=>{ if(this.listening){ try{ rec.start(); }catch(e){} } };
+    rec.onresult = (e)=>{
+      let text = '';
+      for(let i=e.resultIndex;i<e.results.length;i++) text += e.results[i][0].transcript+' ';
+      t.textContent = 'Heard: "'+text.trim()+'"';
+      const low = text.toLowerCase();
+      if(low.includes(cw) || low.includes('help me')){
+        t.className='notice danger'; t.textContent = 'Emergency phrase detected: "'+(low.includes(cw)?cw:'help me')+'". Triggering SOS…';
+        this.stop();
+        Router.go('sos'); SOS.activate('EMERGENCY');
+      }
+    };
+    this.recognition = rec;
+    try{ rec.start(); }catch(e){ t.className='notice warn'; t.textContent='Could not start recognition: '+e.message; }
+  },
+  stop(){
+    this.listening = false;
+    if(this.recognition){ try{ this.recognition.stop(); }catch(e){} }
+    document.getElementById('voiceStartBtn').style.display='block';
+    document.getElementById('voiceStopBtn').style.display='none';
+  }
+};
+
+/* =====================================================================
+   AUTO SOS COUNTDOWN
+===================================================================== */
+const Countdown = {
+  seconds:5, timer:null, remaining:0,
+  select(sec, btn){
+    this.seconds = sec;
+    document.querySelectorAll('#countdown-chips .chip').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+  },
+  start(){
+    document.getElementById('countdown-setup').style.display='none';
+    document.getElementById('countdown-running').style.display='block';
+    this.remaining = this.seconds;
+    document.getElementById('countdown-number').textContent = this.remaining;
+    this.timer = setInterval(()=>{
+      this.remaining--;
+      document.getElementById('countdown-number').textContent = Math.max(this.remaining,0);
+      if(this.remaining<=0){
+        clearInterval(this.timer);
+        document.getElementById('countdown-running').style.display='none';
+        const fired = document.getElementById('countdown-fired');
+        fired.style.display='block';
+        fired.innerHTML = `<div class="notice danger"><strong>Countdown reached zero — Emergency SOS triggered.</strong></div>`;
+        Command.log('sos','AUTO-COUNTDOWN');
+        SOS.activate('EMERGENCY');
+        // reuse the SOS screen's active panel visually
+        document.getElementById('sos-active').style.display='block';
+        document.getElementById('sos-idle').style.display='none';
+      }
+    },1000);
+  },
+  cancel(){
+    clearInterval(this.timer);
+    document.getElementById('countdown-running').style.display='none';
+    document.getElementById('countdown-setup').style.display='block';
+  }
+};
+
+/* =====================================================================
+   SHARE LOCATION
+===================================================================== */
+const Loc = {
+  fetch(){
+    const el = document.getElementById('loc-result');
+    el.innerHTML = `<div class="notice info">Requesting location permission…</div>`;
+    getLocation(pos=>{
+      const {latitude,longitude,accuracy} = pos.coords;
+      const mapLink = `https://maps.google.com/?q=${latitude},${longitude}`;
+      const ts = new Date().toLocaleString();
+      el.innerHTML = `
+        <div class="status-line"><div class="left">Latitude</div><span class="mono">${latitude.toFixed(6)}</span></div>
+        <div class="status-line"><div class="left">Longitude</div><span class="mono">${longitude.toFixed(6)}</span></div>
+        <div class="status-line"><div class="left">Accuracy</div><span class="mono">±${Math.round(accuracy)} m</span></div>
+        <div class="status-line"><div class="left">Timestamp</div><span class="mono">${ts}</span></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick='Loc.share("${mapLink}")'>Share Location</button>
+          <a class="btn btn-outline" href="${mapLink}" target="_blank" rel="noopener">Open Map</a>
+        </div>`;
+    }, err=>{
+      let reason = 'Location unavailable.';
+      if(err.code===1) reason='Permission denied. Enable location access in your browser/site settings.';
+      if(err.code===2) reason='Position unavailable — check GPS/network.';
+      if(err.code===3) reason='Request timed out.';
+      el.innerHTML = `<div class="notice warn">${reason}</div>`;
+    });
+  },
+  async share(mapLink){
+    const text = `My current location: ${mapLink}`;
+    const r = await shareOrCopy(text,'My Location — SHE-SHIELD');
+    alert(r==='shared'?'Location shared.':'Location link copied to clipboard.');
+  }
+};
+
+/* =====================================================================
+   SIREN ALARM (Web Audio API)
+===================================================================== */
+const Siren = {
+  ctx:null, osc:null, gain:null, sweeping:false,
+  start(){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC){ alert('Web Audio API not supported on this browser.'); return; }
+    this.ctx = new AC();
+    this.osc = this.ctx.createOscillator();
+    this.gain = this.ctx.createGain();
+    this.osc.type = 'sawtooth';
+    this.gain.gain.value = 0.25;
+    this.osc.connect(this.gain).connect(this.ctx.destination);
+    this.osc.start();
+    this.sweeping = true;
+    let up = true, freq = 500;
+    this.sweepTimer = setInterval(()=>{
+      freq += up? 40 : -40;
+      if(freq>900){ up=false; } if(freq<500){ up=true; }
+      this.osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    }, 60);
+    document.getElementById('sirenOnBtn').style.display='none';
+    document.getElementById('sirenOffBtn').style.display='block';
+  },
+  stop(){
+    this.sweeping = false;
+    clearInterval(this.sweepTimer);
+    if(this.osc){ try{ this.osc.stop(); }catch(e){} }
+    if(this.ctx){ this.ctx.close(); }
+    document.getElementById('sirenOnBtn').style.display='block';
+    document.getElementById('sirenOffBtn').style.display='none';
+  }
+};
+
+/* =====================================================================
+   CAMERA / EVIDENCE CAPTURE + HISTORY
+===================================================================== */
+const Cam = {
+  stream:null, facing:'environment',
+  async open(){
+    const video = document.getElementById('camPreview');
+    const placeholder = document.getElementById('cam-placeholder');
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      placeholder.className='notice warn';
+      placeholder.innerHTML = 'Camera access is unavailable in this browser.<br><br><button class="btn btn-outline btn-sm" onclick="Cam.retryInstructions()">How to enable</button>';
+      return;
+    }
+    try{
+      this.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:this.facing}, audio:false});
+      video.srcObject = this.stream;
+      video.style.display='block';
+      placeholder.style.display='none';
+      document.getElementById('captureBtn').style.display='block';
+    }catch(err){
+      placeholder.style.display='block';
+      placeholder.className='notice warn';
+      placeholder.innerHTML = `Camera access unavailable (${err.name}).<br><br>
+        <button class="btn btn-outline btn-sm" onclick="Cam.open()">Try Again</button>
+        <button class="btn btn-outline btn-sm" onclick="Cam.retryInstructions()">Permission Instructions</button>`;
+    }
+  },
+  retryInstructions(){
+    alert('Open your browser\'s site settings (usually the padlock icon next to the address bar) and set Camera to "Allow" for this site, then try again.');
+  },
+  async flip(){
+    this.facing = this.facing==='environment' ? 'user' : 'environment';
+    if(this.stream){ this.stream.getTracks().forEach(t=>t.stop()); }
+    this.open();
+  },
+  capture(){
+    const video = document.getElementById('camPreview');
+    const canvas = document.getElementById('camCanvas');
+    canvas.width = video.videoWidth || 640; canvas.height = video.videoHeight || 480;
+    canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+    const dataUrl = canvas.toDataURL('image/jpeg',0.82);
+    this.save(dataUrl, 'camera');
+  },
+  upload(evt){
+    const file = evt.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=> this.save(reader.result, 'upload');
+    reader.readAsDataURL(file);
+  },
+  save(dataUrl, type){
+    const evidence = Store.get('ss_evidence', []);
+    const entry = {id: Date.now(), img:dataUrl, type, ts:new Date().toLocaleString()};
+    getLocation(pos=>{
+      entry.loc = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
+      evidence.unshift(entry); Store.set('ss_evidence', evidence);
+      Command.log('evidence', type);
+      alert('Evidence captured and saved.');
+    }, ()=>{
+      evidence.unshift(entry); Store.set('ss_evidence', evidence);
+      Command.log('evidence', type);
+      alert('Evidence captured and saved (location unavailable).');
+    });
+  }
+};
+
+const Evidence = {
+  render(){
+    const evidence = Store.get('ss_evidence', []);
+    const gal = document.getElementById('evidence-gallery');
+    const empty = document.getElementById('evidence-empty');
+    if(!evidence.length){ gal.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    gal.innerHTML = evidence.map(e=>`
+      <div class="thumb">
+        <img src="${e.img}" alt="evidence">
+        <button class="del" onclick="Evidence.remove(${e.id})">✕</button>
+      </div>`).join('');
+  },
+  remove(id){
+    let evidence = Store.get('ss_evidence', []);
+    evidence = evidence.filter(e=>e.id!==id);
+    Store.set('ss_evidence', evidence);
+    this.render();
+  }
+};
+
+/* =====================================================================
+   SAFE JOURNEY
+===================================================================== */
+const Journey = {
+  watchId:null, deadline:null,
+  start(){
+    const dest = document.getElementById('jDest').value.trim() || 'Unspecified';
+    const duration = parseInt(document.getElementById('jDuration').value) || 30;
+    const journey = {dest, duration, startedAt: Date.now(), active:true};
+    Store.set('ss_journey', journey);
+    document.getElementById('journey-setup').style.display='none';
+    const wrap = document.getElementById('journey-active');
+    wrap.style.display='block';
+    wrap.innerHTML = `<div class="notice ok"><strong>JOURNEY ACTIVE</strong><br>Destination: ${dest} · Expected: ${duration} min</div>
+      <div id="journey-live" class="notice info" style="margin-top:10px;">Tracking while this tab is open…</div>
+      <button class="btn btn-outline" style="margin-top:10px;" onclick="Journey.end()">End Journey</button>`;
+    Command.log('journey', dest);
+    if(navigator.geolocation){
+      this.watchId = navigator.geolocation.watchPosition(pos=>{
+        document.getElementById('journey-live').textContent =
+          `Last update: ${new Date().toLocaleTimeString()} — ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+      }, ()=>{}, {enableHighAccuracy:true});
+    }
+    this.deadline = setTimeout(()=>{
+      const wrap2 = document.getElementById('journey-active');
+      wrap2.innerHTML = `<div class="notice warn"><strong>Safety check:</strong> expected journey time has passed. Are you okay?</div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="Journey.confirmSafe()">I'm Safe</button><button class="btn btn-coral" onclick="Router.go('sos');SOS.activate('EMERGENCY')">Need Help</button></div>`;
+    }, duration*60*1000);
+  },
+  confirmSafe(){ this.end(); alert('Marked as safe. Journey ended.'); },
+  end(){
+    if(this.watchId!=null) navigator.geolocation.clearWatch(this.watchId);
+    clearTimeout(this.deadline);
+    Store.set('ss_journey', null);
+    document.getElementById('journey-setup').style.display='block';
+    document.getElementById('journey-active').style.display='none';
+  }
+};
+
+/* =====================================================================
+   FAKE CALL
+===================================================================== */
+const FakeCall = {
+  timer:null, ringtone:null,
+  schedule(){
+    const name = document.getElementById('fakeCallerName').value.trim() || 'Mom';
+    const delay = (parseInt(document.getElementById('fakeCallDelay').value)||3)*1000;
+    alert('Simulated call from '+name+' will ring in '+(delay/1000)+' seconds.');
+    this.timer = setTimeout(()=>this.ring(name), delay);
+  },
+  ring(name){
+    const overlay = document.getElementById('fakeCallOverlay');
+    overlay.innerHTML = `
+      <div class="call-screen">
+        <div style="text-align:center;">
+          <div class="avatar" style="margin:0 auto 14px;">${name[0]||'?'}</div>
+          <h2 style="color:#fff;">${name}</h2>
+          <p style="color:#cfc2ef;margin-top:6px;">Incoming call…</p>
+        </div>
+        <div class="call-buttons">
+          <button class="call-btn decline" onclick="FakeCall.end()">✕</button>
+          <button class="call-btn accept" onclick="FakeCall.answer('${name}')">✓</button>
+        </div>
+      </div>`;
+  },
+  answer(name){
+    document.getElementById('fakeCallOverlay').innerHTML = `
+      <div class="call-screen">
+        <div style="text-align:center;"><div class="avatar" style="margin:0 auto 14px;">${name[0]}</div><h2 style="color:#fff;">${name}</h2><p style="color:#cfc2ef;">Call in progress — 00:0<span id="callSec">1</span></p></div>
+        <button class="call-btn decline" onclick="FakeCall.end()">✕</button>
+      </div>`;
+  },
+  end(){ document.getElementById('fakeCallOverlay').innerHTML=''; clearTimeout(this.timer); }
+};
+
+/* =====================================================================
+   HELPLINES
+===================================================================== */
+const Helplines = {
+  data: Store.get('ss_helplines', [
+    {name:'Women Helpline (National)', num:'1091', purpose:'24x7 helpline for women in distress'},
+    {name:'Police', num:'112', purpose:'Nationwide emergency response'},
+    {name:'NHAA Helpline', num:'14566', purpose:'National Helpline for victims/complainants — PS26093'},
+    {name:'Ambulance', num:'108', purpose:'Medical emergency response'},
+    {name:'Childline', num:'1098', purpose:'Emergency support for children'},
+  ]),
+  render(){
+    document.getElementById('helplines-list').innerHTML = this.data.map(h=>`
+      <div class="list-item">
+        <div><strong>${h.name}</strong><div class="meta">${h.purpose}</div></div>
+        <a class="btn btn-sm btn-coral" href="tel:${h.num}">Call ${h.num}</a>
+      </div>`).join('') + `<p style="font-size:11.5px;color:var(--ink-soft);margin-top:10px;">Numbers are configurable in code (Helplines.data) — insert officially verified numbers before deployment.</p>`;
+  }
+};
+
+/* =====================================================================
+   AI STRESS & TRAUMA ASSESSMENT
+===================================================================== */
+const Assess = {
+  SVI_BANDS: [ {max:24,label:'LOW'}, {max:49,label:'MODERATE'}, {max:74,label:'HIGH'}, {max:100,label:'CRITICAL'} ],
+  questions:[
+    {id:'q1', text:'How safe do you currently feel?', weightHigh:['not','unsafe','scared','danger']},
+    {id:'q2', text:'Are you experiencing fear or anxiety right now?'},
+    {id:'q3', text:'Do you feel threatened or intimidated?'},
+    {id:'q4', text:'Are you having difficulty sleeping or concentrating?'},
+    {id:'q5', text:'Do you feel isolated or unsupported?'},
+    {id:'q6', text:'Do you feel overwhelmed by the situation?'},
+    {id:'q7', text:'Do you feel that you may be in immediate danger?'},
+  ],
+  answers:{},
+  consent(){
+    document.getElementById('assess-consent').style.display='none';
+    document.getElementById('assess-mode').style.display='block';
+  },
+  startText(){
+    document.getElementById('assess-mode').style.display='none';
+    const wrap = document.getElementById('assess-questions');
+    wrap.style.display='block';
+    wrap.innerHTML = `<div class="card-panel">` + this.questions.map(q=>`
+      <div class="field">
+        <label>${q.text} <span style="font-weight:400;color:var(--ink-soft);">(optional)</span></label>
+        <textarea id="a_${q.id}" placeholder="Type as much or as little as you'd like…"></textarea>
+      </div>`).join('') + `<button class="btn btn-primary" onclick="Assess.submitText()">Get My Assessment</button></div>`;
+  },
+  startVoice(){
+    document.getElementById('assess-mode').style.display='none';
+    const wrap = document.getElementById('assess-voice-panel');
+    wrap.style.display='block';
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){
+      wrap.innerHTML = `<div class="notice warn">Speech recognition isn't supported here. Please use the Text Assessment instead.</div>
+        <button class="btn btn-outline" onclick="Router.go('assess')">Back</button>`;
+      return;
+    }
+    wrap.innerHTML = `<div class="card-panel">
+      <div class="notice info">Prototype AI Assessment — speak freely about how you're feeling for up to 30 seconds. Real transcription is used; speech-rate and pause patterns are estimated heuristically for this demo, not a validated clinical model.</div>
+      <button class="btn btn-primary" id="voiceAssessBtn" onclick="Assess.recordVoice()">Start Speaking</button>
+      <div id="voiceAssessTranscript" class="notice" style="display:none;margin-top:10px;"></div>
+    </div>`;
+  },
+  recordVoice(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const rec = new SR();
+    rec.continuous = true; rec.interimResults = true; rec.lang='en-IN';
+    const t = document.getElementById('voiceAssessTranscript');
+    let fullText = ''; let words=0; let pauses=0; let lastTime=Date.now();
+    t.style.display='block'; t.className='notice info'; t.textContent='Listening…';
+    document.getElementById('voiceAssessBtn').disabled = true;
+    rec.onresult = (e)=>{
+      const now = Date.now();
+      if(now-lastTime > 1800) pauses++;
+      lastTime = now;
+      let text='';
+      for(let i=e.resultIndex;i<e.results.length;i++) text += e.results[i][0].transcript+' ';
+      fullText = text; words = text.trim().split(/\\s+/).filter(Boolean).length;
+      t.textContent = 'Transcribing: "'+text.trim()+'"';
+    };
+    rec.onerror = ()=>{ t.className='notice warn'; t.textContent='Microphone/recognition error — please use Text Assessment instead.'; document.getElementById('voiceAssessBtn').disabled=false; };
+    rec.start();
+    setTimeout(()=>{
+      try{ rec.stop(); }catch(e){}
+      Assess.finishVoice(fullText, pauses);
+    }, 30000);
+    document.getElementById('voiceAssessBtn').textContent = 'Listening… (30s)';
+  },
+  finishVoice(text, pauses){
+    const indicators = this.scoreText(text);
+    indicators.notes.push(pauses>2 ? 'Multiple long pauses detected in speech (heuristic).' : 'Speech pacing appeared relatively steady (heuristic).');
+    this.renderResult(indicators, 'voice');
+  },
+  submitText(){
+    let combined = '';
+    this.questions.forEach(q=>{ combined += ' ' + (document.getElementById('a_'+q.id).value||''); });
+    document.getElementById('assess-questions').style.display='none';
+    const indicators = this.scoreText(combined);
+    this.renderResult(indicators, 'text');
+  },
+  scoreText(text){
+    const low = (text||'').toLowerCase();
+    const lexicon = {
+      fear:['scared','afraid','fear','terrified','frightened'],
+      anxiety:['anxious','anxiety','panic','worried','nervous'],
+      threat:['threat','threaten','intimidat','stalk','follow me','watching me'],
+      isolation:['alone','isolat','no one','nobody','unsupported'],
+      hopelessness:['hopeless','no point','give up','can\'t go on','worthless'],
+      selfharm:['suicide','kill myself','end my life','hurt myself','self harm','die'],
+      sleep:['can\'t sleep','not sleeping','can\'t concentrate','can\'t focus'],
+      danger:['immediate danger', 'unsafe', 'in danger', 'not safe'],
+    };
+    let score = 8; // baseline
+    const found = [];
+    Object.keys(lexicon).forEach(cat=>{
+      const hit = lexicon[cat].some(term=>low.includes(term));
+      if(hit){
+        found.push(cat);
+        score += (cat==='selfharm') ? 45 : (cat==='danger'||cat==='threat') ? 18 : 12;
+      }
+    });
+    if(!low.trim()) score = 5;
+    score = Math.max(0, Math.min(100, score));
+    let band = this.SVI_BANDS.find(b=>score<=b.max).label;
+    if(found.includes('selfharm')) band='CRITICAL';
+    return {score, band, indicators:found, notes:[]};
+  },
+  renderResult(result, mode){
+    document.getElementById('assess-voice-panel').style.display='none';
+    const wrap = document.getElementById('assess-result');
+    wrap.style.display='block';
+    Store.set('ss_last_svi', {score:result.score, band:result.band, ts:Date.now()});
+    Command.log('assessment', result.band);
+
+    const indicatorText = {
+      fear:'reported fear', anxiety:'signs of anxiety', threat:'intimidation or threat-related language',
+      isolation:'social isolation', hopelessness:'hopelessness', selfharm:'possible self-harm/suicidal language',
+      sleep:'sleep or concentration difficulty', danger:'perceived immediate danger'
+    };
+    const readableIndicators = result.indicators.map(i=>indicatorText[i]).join(', ') || 'no strong distress indicators in the responses given';
+
+    const recos = {
+      LOW:['General self-care and safety awareness resources.','Optional counselling if you\'d like to talk to someone.'],
+      MODERATE:['Speaking with a counsellor is recommended.','Consider setting up a trusted contact for check-ins.','Review Self-Defense Tips for situational awareness.'],
+      HIGH:['Counselling and, where relevant, legal assistance is recommended.','Consider notifying a trusted contact.','Medical support if you are experiencing physical effects of stress.'],
+      CRITICAL:['Immediate safety guidance: consider contacting a helpline now.','Notify a trusted contact immediately.','Urgent professional support is strongly recommended.'],
+    };
+
+    wrap.innerHTML = `
+      <div class="card-panel">
+        <div class="notice info">Prototype AI Assessment (${mode}) — this is a risk/vulnerability indicator, not a medical diagnosis.</div>
+        <div class="svi-ring-wrap">
+          <span style="font-size:12px;color:var(--ink-soft);font-family:var(--font-mono);letter-spacing:.1em;">STRESS VULNERABILITY INDEX</span>
+          <div class="svi-score mono">${result.score} / 100</div>
+          <span class="risk-tag ${result.band}">${result.band}</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--ink-soft);">Your responses contain indicators associated with ${readableIndicators}. Elevated scores reflect a combination of these signals, using a <strong>prototype risk-assessment scale</strong> that is not medically validated.</p>
+      </div>
+      <div class="card-panel">
+        <h4 style="margin-bottom:10px;">Recommended next steps</h4>
+        <ul style="margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;">${recos[result.band].map(r=>`<li>${r}</li>`).join('')}</ul>
+        ${result.band==='CRITICAL' ? `<button class="btn btn-coral" style="margin-top:14px;" onclick="Router.go('sos');SOS.activate('EMERGENCY')">Get Immediate Help — Emergency SOS</button>
+        <button class="btn btn-outline" style="margin-top:10px;" onclick="Router.go('helplines')">View Helplines</button>` :
+        `<button class="btn btn-outline" style="margin-top:14px;" onclick="Router.go('helplines')">View Helplines &amp; Support</button>`}
+      </div>
+      <button class="btn btn-ghost" onclick="Assess.reset()">Take Assessment Again</button>
+    `;
+  },
+  reset(){
+    document.getElementById('assess-consent').style.display='block';
+    document.getElementById('assess-mode').style.display='none';
+    document.getElementById('assess-questions').style.display='none';
+    document.getElementById('assess-voice-panel').style.display='none';
+    document.getElementById('assess-result').style.display='none';
+  }
+};
+
+/* =====================================================================
+   AI SAFETY ASSISTANT (rule-based)
+===================================================================== */
+const Assistant = {
+  started:false,
+  rules:[
+    {kw:['follow','following','stalk'], reply:'If someone is following you: head to a public, well-lit place, call a trusted contact or 112, and consider using Share Location so someone knows exactly where you are. Avoid confronting them directly.'},
+    {kw:['unsafe','alone','travel'], reply:'When travelling alone: share your live journey with a trusted contact using Safe Journey, keep your phone charged, and stay in well-populated areas. Trust your instincts — if something feels wrong, move toward people.'},
+    {kw:['location','share my location'], reply:'You can open Share Location from the home screen — it uses your device GPS and lets you send a map link via WhatsApp, SMS, or the share sheet.'},
+    {kw:['incident','after','happened','report'], reply:'After an incident: get to safety first, then note down what happened while it\'s fresh — you can use Incident Report to save details privately. Consider reaching out to a helpline for guidance on next steps.'},
+    {kw:['help','emergency','danger','scared','afraid'], reply:'If you are in immediate danger, please use the Emergency SOS button now — it shares your location and a prepared message with your trusted contacts.'},
+    {kw:['helpline','number','call'], reply:'You can find configured emergency numbers under Emergency Helplines, including 112 (Police) and 1091 (Women Helpline).'},
+  ],
+  init(){
+    this.started = true;
+    const wrap = document.getElementById('chatWrap');
+    wrap.innerHTML = '';
+    this.push('bot', "Hi, I'm the SHE-SHIELD Safety Assistant (prototype). Ask me about staying safe, sharing your location, or what to do after an incident.");
+  },
+  push(role, text){
+    const wrap = document.getElementById('chatWrap');
+    const div = document.createElement('div');
+    div.className = 'msg '+role;
+    div.textContent = text;
+    wrap.appendChild(div);
+    wrap.scrollTop = wrap.scrollHeight;
+  },
+  send(){
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    this.push('user', text);
+    input.value='';
+    const low = text.toLowerCase();
+    const hit = this.rules.find(r=>r.kw.some(k=>low.includes(k)));
+    setTimeout(()=>{
+      this.push('bot', hit ? hit.reply : "I can help with safety questions — try asking about travelling alone, being followed, sharing your location, or what to do after an incident. For an emergency, tap the SOS shortcut below.");
+    }, 300);
+  }
+};
+
+/* =====================================================================
+   SELF-DEFENSE TIPS
+===================================================================== */
+const Tips = {
+  sections:[
+    {title:'Situational Awareness', items:['Stay alert to your surroundings, especially in unfamiliar areas.','Avoid distractions like headphones at full volume in isolated areas.','Trust your instincts — leave if something feels wrong.']},
+    {title:'Getting Attention', items:['Shout clearly — "Fire!" often draws more attention than "Help".','Use a whistle or your phone\'s siren feature to attract help.','Make direct eye contact with bystanders and ask a specific person for help.']},
+    {title:'Safe Escape', items:['Move toward crowds, shops, or well-lit public spaces.','Have an exit plan when entering unfamiliar places.','Keep some distance from anyone who feels threatening.']},
+    {title:'Emergency Communication', items:['Save trusted contacts and helplines in advance.','Learn to quickly trigger Share Location or SOS from muscle memory.','Tell someone your general plans when heading out alone.']},
+    {title:'Travel Safety', items:['Prefer verified transport options and share trip details.','Sit near the driver or exits in public transport when possible.','Keep your phone charged and easily accessible.']},
+    {title:'Digital Safety', items:['Be cautious sharing live location publicly on social media.','Review app permissions regularly.','Block and report harassment on digital platforms.']},
+    {title:'After an Incident', items:['Prioritize your physical safety first.','Note down details while memory is fresh using Incident Report.','Reach out to a trusted contact, counsellor, or helpline for support.']},
+  ],
+  render(){
+    document.getElementById('tips-content').innerHTML = this.sections.map(s=>`
+      <div class="tips-block"><h4>${s.title}</h4><ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+  }
+};
+
+/* =====================================================================
+   INCIDENT REPORT
+===================================================================== */
+const Incident = {
+  save(){
+    const rec = {
+      id:Date.now(),
+      date:document.getElementById('incDate').value,
+      time:document.getElementById('incTime').value,
+      location:document.getElementById('incLocation').value,
+      category:document.getElementById('incCategory').value,
+      desc:document.getElementById('incDesc').value,
+      notes:document.getElementById('incNotes').value,
+    };
+    const list = Store.get('ss_incidents', []);
+    list.unshift(rec);
+    Store.set('ss_incidents', list);
+    document.getElementById('incident-success').style.display='block';
+    Command.log('incident', rec.category);
+    this.render();
+  },
+  render(){
+    const list = Store.get('ss_incidents', []);
+    document.getElementById('incident-list').innerHTML = list.length ? list.map(r=>`
+      <div class="list-item">
+        <div><strong>${r.category||'Incident'}</strong><div class="meta">${r.date||''} ${r.time||''} · ${r.location||'—'}</div></div>
+        <button class="icon-action danger" onclick="Incident.remove(${r.id})">🗑</button>
+      </div>`).join('') : `<p class="notice info">No saved reports yet.</p>`;
+  },
+  remove(id){
+    let list = Store.get('ss_incidents', []);
+    list = list.filter(r=>r.id!==id);
+    Store.set('ss_incidents', list);
+    this.render();
+  }
+};
+
+/* =====================================================================
+   EMERGENCY CONTACTS
+===================================================================== */
+const Contacts = {
+  add(){
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const relationship = document.getElementById('cRel').value.trim();
+    const trusted = document.getElementById('cTrusted').checked;
+    if(!name || !phone){ alert('Name and phone number are required.'); return; }
+    const list = Store.get('ss_contacts', []);
+    list.push({id:Date.now(), name, phone, relationship, trusted});
+    Store.set('ss_contacts', list);
+    ['cName','cPhone','cRel'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('cTrusted').checked=false;
+    this.render();
+  },
+  render(){
+    const list = Store.get('ss_contacts', []);
+    document.getElementById('contacts-list').innerHTML = list.length ? list.map(c=>`
+      <div class="list-item">
+        <div><strong>${c.name}</strong> ${c.trusted?'<span class="badge ok">TRUSTED</span>':''}<div class="meta">${c.relationship||''} · ${c.phone}</div></div>
+        <div>
+          <a class="icon-action" href="tel:${c.phone}">📞</a>
+          <button class="icon-action danger" onclick="Contacts.remove(${c.id})">🗑</button>
+        </div>
+      </div>`).join('') : `<p class="notice info">No contacts saved yet.</p>`;
+  },
+  remove(id){
+    let list = Store.get('ss_contacts', []);
+    list = list.filter(c=>c.id!==id);
+    Store.set('ss_contacts', list);
+    this.render();
+  }
+};
+
+/* =====================================================================
+   BATTERY SAVER SOS
+===================================================================== */
+const Battery = {
+  async render(){
+    const el = document.getElementById('battery-status');
+    if('getBattery' in navigator){
+      try{
+        const b = await navigator.getBattery();
+        el.textContent = `Battery: ${Math.round(b.level*100)}% ${b.charging?'(charging)':''}`;
+      }catch(e){ el.textContent='Battery status unavailable.'; }
+    } else {
+      el.textContent = 'Battery status API not supported in this browser.';
+    }
+    const on = Store.get('ss_lowpower', false);
+    document.getElementById('lowPowerBtn').textContent = on ? 'Disable Low Power Safety Mode' : 'Enable Low Power Safety Mode';
+  },
+  toggle(){
+    const on = !Store.get('ss_lowpower', false);
+    Store.set('ss_lowpower', on);
+    document.body.classList.toggle('low-power', on);
+    this.render();
+  }
+};
+
+/* =====================================================================
+   OFFLINE SOS DRAFT
+===================================================================== */
+const OfflineDraft = {
+  render(){
+    const online = navigator.onLine;
+    const status = document.getElementById('offline-net-status');
+    status.className = 'notice ' + (online?'ok':'warn');
+    status.textContent = online ? 'You are online.' : 'You are currently offline — your draft will be saved locally and marked ready to send once you\'re back online.';
+    const draft = Store.get('ss_offline_draft', null);
+    const view = document.getElementById('offline-draft-view');
+    if(draft){
+      view.innerHTML = `<div class="notice ${online?'ok':'info'}"><strong>${online?'Offline emergency draft ready to share.':'Draft saved.'}</strong><br>Saved: ${draft.ts}</div>
+        <div class="notice info mono" style="white-space:pre-wrap;margin-top:8px;">${draft.msg}</div>
+        ${online? `<div class="btn-row"><button class="btn btn-primary" onclick='OfflineDraft.share(${JSON.stringify(draft.msg)})'>Share Now</button><button class="btn btn-outline" onclick="OfflineDraft.clear()">Clear Draft</button></div>` : ''}`;
+    } else {
+      view.innerHTML = '';
+    }
+  },
+  save(){
+    const msg = document.getElementById('offlineMsg').value.trim();
+    if(!msg){ alert('Write a message first.'); return; }
+    Store.set('ss_offline_draft', {msg, ts:new Date().toLocaleString()});
+    this.render();
+  },
+  clear(){ Store.set('ss_offline_draft', null); this.render(); },
+  async share(msg){ const r = await shareOrCopy(msg,'SHE-SHIELD Offline Draft'); alert(r==='shared'?'Shared.':'Copied to clipboard.'); },
+  onNetworkChange(online){
+    const active = document.getElementById('screen-offline').classList.contains('active');
+    if(active) this.render();
+    const draft = Store.get('ss_offline_draft', null);
+    if(online && draft){ /* surfaced via render() message above */ }
+  }
+};
+
+/* =====================================================================
+   TRUSTED ZONE
+===================================================================== */
+const Zone = {
+  saveCurrent(){
+    const name = document.getElementById('zoneName').value.trim();
+    const radius = parseInt(document.getElementById('zoneRadius').value) || 150;
+    if(!name){ alert('Enter a zone name.'); return; }
+    getLocation(pos=>{
+      const zones = Store.get('ss_trustedzones', []);
+      zones.push({id:Date.now(), name, radius, lat:pos.coords.latitude, lng:pos.coords.longitude});
+      Store.set('ss_trustedzones', zones);
+      this.render();
+    }, err=>{
+      alert('Could not get current location: '+(err.message||'permission denied'));
+    });
+  },
+  distanceMeters(lat1,lng1,lat2,lng2){
+    const R=6371000, toRad = d=>d*Math.PI/180;
+    const dLat = toRad(lat2-lat1), dLng = toRad(lng2-lng1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    return R * 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  },
+  checkZone(zone){
+    const result = document.getElementById('zone-check-result');
+    result.innerHTML = `<div class="notice info">Checking location…</div>`;
+    getLocation(pos=>{
+      const d = this.distanceMeters(pos.coords.latitude,pos.coords.longitude,zone.lat,zone.lng);
+      const inside = d <= zone.radius;
+      result.innerHTML = `<div class="notice ${inside?'ok':'warn'}">${inside? 'Inside Trusted Zone' : 'Outside Trusted Zone'} — ~${Math.round(d)}m from "${zone.name}". Note: continuous background monitoring is limited by browser restrictions; this is a point-in-time check.</div>`;
+    }, ()=>{ result.innerHTML = `<div class="notice warn">Could not get current location.</div>`; });
+  },
+  render(){
+    const zones = Store.get('ss_trustedzones', []);
+    document.getElementById('zone-list').innerHTML = zones.length ? zones.map(z=>`
+      <div class="list-item">
+        <div><strong>${z.name}</strong><div class="meta">Radius ${z.radius}m</div></div>
+        <div class="btn-row" style="margin:0;">
+          <button class="btn btn-sm btn-outline" onclick='Zone.checkZone(${JSON.stringify(z)})'>Check</button>
+          <button class="icon-action danger" onclick="Zone.remove(${z.id})">🗑</button>
+        </div>
+      </div>`).join('') : `<p class="notice info">No trusted zones saved yet.</p>`;
+  },
+  remove(id){
+    let zones = Store.get('ss_trustedzones', []);
+    zones = zones.filter(z=>z.id!==id);
+    Store.set('ss_trustedzones', zones);
+    this.render();
+  }
+};
+
+/* =====================================================================
+   EMERGENCY COMMAND CENTER
+===================================================================== */
+const Command = {
+  log(kind, detail){
+    const logs = Store.get('ss_activity_log', []);
+    logs.unshift({kind, detail, ts:new Date().toLocaleString()});
+    Store.set('ss_activity_log', logs.slice(0,20));
+  },
+  render(){
+    const contacts = Store.get('ss_contacts', []);
+    const journey = Store.get('ss_journey', null);
+    const svi = Store.get('ss_last_svi', null);
+    const evidence = Store.get('ss_evidence', []);
+    const incidents = Store.get('ss_incidents', []);
+    const logs = Store.get('ss_activity_log', []);
+    document.getElementById('command-content').innerHTML = `
+      <div class="status-line"><div class="left">Safety status</div><span class="badge ok">MONITORED</span></div>
+      <div class="status-line"><div class="left">SOS status</div><span class="badge ${logs.some(l=>l.kind==='sos')?'warn':'ok'}">${logs.some(l=>l.kind==='sos')?'RECENTLY TRIGGERED':'STANDBY'}</span></div>
+      <div class="status-line"><div class="left">Journey status</div><span class="badge ${journey?'ok':'off'}">${journey? 'ACTIVE — '+journey.dest : 'NONE ACTIVE'}</span></div>
+      <div class="status-line"><div class="left">Trusted contacts</div><span class="mono">${contacts.length}</span></div>
+      <div class="status-line"><div class="left">Recent evidence</div><span class="mono">${evidence.length} item(s)</span></div>
+      <div class="status-line"><div class="left">Recent incidents</div><span class="mono">${incidents.length} report(s)</span></div>
+      <div class="status-line"><div class="left">Last SVI / Risk level</div><span class="risk-tag ${svi?svi.band:''}" style="${svi?'':'background:var(--lav-100);color:var(--ink-soft);'}">${svi? svi.score+' — '+svi.band : 'Not assessed yet'}</span></div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;">Recent activity</h4>
+        ${logs.length? logs.map(l=>`<div class="list-item"><div>${l.kind.toUpperCase()} — ${l.detail}</div><span class="meta">${l.ts}</span></div>`).join('') : '<p class="notice info">No activity yet.</p>'}
+      </div>
+    `;
+  }
+};
+
+/* =====================================================================
+   STATUS / PERMISSION CENTER
+===================================================================== */
+const Status = {
+  async render(){
+    const el = document.getElementById('status-content');
+    el.innerHTML = `<div class="notice info">Checking device capabilities…</div>`;
+    const rows = [];
+
+    // Location
+    rows.push(await this.permRow('📍 Location', 'geolocation'));
+    // Microphone
+    rows.push(await this.permRow('🎤 Microphone', 'microphone'));
+    // Camera
+    rows.push(await this.permRow('📷 Camera', 'camera'));
+    // Torch
+    rows.push({label:'🔦 Flashlight / torch', badge:'warn', text:'Supported only on some Android/Chrome devices via active camera track — attempted only during Evidence Capture.'});
+    // Battery
+    if('getBattery' in navigator){
+      try{ const b = await navigator.getBattery(); rows.push({label:'🔋 Battery', badge:'ok', text:`${Math.round(b.level*100)}% ${b.charging?'(charging)':''}`}); }
+      catch(e){ rows.push({label:'🔋 Battery', badge:'off', text:'Unavailable'}); }
+    } else rows.push({label:'🔋 Battery', badge:'off', text:'Not supported by this browser'});
+    // Online
+    rows.push({label:'🌐 Internet connection', badge: navigator.onLine?'ok':'off', text: navigator.onLine?'Online':'Offline'});
+    // AI assessment
+    const svi = Store.get('ss_last_svi', null);
+    rows.push({label:'🧠 AI assessment status', badge: svi?'ok':'warn', text: svi? `Last run: ${svi.band} (${svi.score})` : 'Not yet run'});
+
+    el.innerHTML = rows.map(r=>`
+      <div class="status-line"><div class="left">${r.label}</div><span class="badge ${r.badge}">${r.text}</span></div>
+    `).join('');
+  },
+  async permRow(label, name){
+    try{
+      if(navigator.permissions && navigator.permissions.query){
+        const status = await navigator.permissions.query({name});
+        const map = {granted:['ok','Available'], denied:['off','Denied'], prompt:['warn','Permission required']};
+        const [badge,text] = map[status.state] || ['warn','Unknown'];
+        return {label, badge, text};
+      }
+    }catch(e){ /* some browsers don't support querying camera/mic permission state */ }
+    return {label, badge:'warn', text:'Tap the related feature to check'};
+  }
+};
+
+/* =====================================================================
+   FLOATING EMERGENCY BANNER (shown while any SOS is active)
+===================================================================== */
+// (kept simple — active state surfaces inline within the SOS screens themselves)
+
+/* boot */
+App.init();
+</script>
+</body>
+</html>
