@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="theme-color" content="#3B2F2A">
-
     <title>SHE-SHIELD | Your Safety, Our Priority</title>
 
+    <meta name="description"
+          content="SHE-SHIELD women safety and AI stress and trauma assessment platform">
+
+    <link rel="icon" type="image/png" href="she-shield-logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -17,76 +19,130 @@
 
 <div id="splashScreen" class="splash-screen">
 
-    <img
-        src="she-shield-logo.png.jpeg"
-        alt="SHE-SHIELD Logo"
-        class="splash-logo"
-    >
+    <div class="splash-content">
 
-    <h1>SHE-SHIELD</h1>
+        <img
+            src="she-shield-logo.png"
+            alt="SHE-SHIELD Logo"
+            class="splash-logo"
+        >
 
-    <div class="gold-line"></div>
+        <h1>SHE-SHIELD</h1>
 
-    <p data-i18n="tagline">
-        Your Safety, Our Priority.
-    </p>
+        <p>Your Safety. Our Priority.</p>
+
+        <div class="loading-line">
+            <span></span>
+        </div>
+
+    </div>
 
 </div>
 
 
+<!-- ================= LANGUAGE SCREEN ================= -->
+
+<section id="languageScreen" class="language-screen hidden">
+
+    <div class="language-card">
+
+        <img
+            src="she-shield-logo.png"
+            alt="SHE-SHIELD"
+            class="language-logo"
+        >
+
+        <h1 id="languageTitle">Choose Your Language</h1>
+
+        <p id="languageSubtitle">
+            Select your preferred language
+        </p>
+
+        <div class="language-options">
+
+            <button class="language-btn" data-lang="en">
+                🇬🇧 <span>English</span>
+            </button>
+
+            <button class="language-btn" data-lang="kn">
+                🇮🇳 <span>ಕನ್ನಡ</span>
+            </button>
+
+            <button class="language-btn" data-lang="te">
+                🇮🇳 <span>తెలుగు</span>
+            </button>
+
+            <button class="language-btn" data-lang="ta">
+                🇮🇳 <span>தமிழ்</span>
+            </button>
+
+            <button class="language-btn" data-lang="hi">
+                🇮🇳 <span>हिन्दी</span>
+            </button>
+
+        </div>
+
+        <button id="continueLanguage" class="gold-btn">
+            Continue →
+        </button>
+
+    </div>
+
+</section>
+
+
 <!-- ================= MAIN APP ================= -->
 
-<div id="app" class="app hidden">
+<div id="app" class="hidden">
 
     <!-- HEADER -->
 
     <header class="header">
 
-        <button class="brand" onclick="showPage('home')">
+        <div class="brand">
 
             <img
-                src="she-shield-logo.png.jpeg"
+                src="she-shield-logo.png"
                 alt="SHE-SHIELD"
+                class="brand-logo"
             >
 
             <div>
-                <strong>SHE-SHIELD</strong>
-                <small data-i18n="platform">
-                    Safety & Support Platform
-                </small>
+                <h2>SHE-SHIELD</h2>
+                <span id="brandSubtitle">
+                    Your Safety. Our Priority.
+                </span>
             </div>
 
-        </button>
+        </div>
 
 
-        <div class="header-right">
+        <nav class="desktop-nav">
 
-            <!-- LANGUAGE -->
+            <button data-page="home">Home</button>
 
-            <div class="language-box">
+            <button data-page="safety">
+                Immediate Safety
+            </button>
 
-                🌐
+            <button data-page="assessment">
+                AI Assessment
+            </button>
 
-                <select id="languageSelect">
+        </nav>
 
-                    <option value="en">English</option>
 
-                    <option value="kn">ಕನ್ನಡ</option>
+        <div class="header-actions">
 
-                    <option value="te">తెలుగు</option>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+                <option value="te">తెలుగు</option>
+                <option value="ta">தமிழ்</option>
+                <option value="hi">हिन्दी</option>
+            </select>
 
-                    <option value="ta">தமிழ்</option>
-
-                    <option value="hi">हिन्दी</option>
-
-                </select>
-
-            </div>
-
-            <button
-                class="menu-button"
-                onclick="showPage('home')"
-            >
+            <button id="menuButton" class="menu-btn">
                 ☰
             </button>
 
@@ -95,52 +151,679 @@
     </header>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- ================= MOBILE MENU ================= -->
 
-    <main id="mainContent"></main>
+    <aside id="mobileMenu" class="mobile-menu">
 
+        <button data-page="home">⌂ Home</button>
 
-    <!-- TOAST -->
-
-    <div id="toast"></div>
-
-
-    <!-- BOTTOM NAVIGATION -->
-
-    <nav class="bottom-nav">
-
-        <button onclick="showPage('home')">
-            🏠
-            <span data-i18n="home">Home</span>
+        <button data-page="safety">
+            🛡 Immediate Safety
         </button>
 
-        <button onclick="showPage('safety')">
-            🛡️
-            <span data-i18n="immediateSafety">
-                Immediate Safety
-            </span>
+        <button data-page="assessment">
+            🧠 AI Assessment
         </button>
 
-        <button onclick="showPage('assessment')">
-            🧠
-            <span data-i18n="assessment">
-                AI Assessment
-            </span>
+        <button data-page="incidents">
+            📋 Incidents
         </button>
 
-        <button onclick="showPage('contacts')">
-            👥
-            <span data-i18n="contacts">
-                Contacts
-            </span>
+        <button data-page="contacts">
+            👥 Trusted Contacts
         </button>
 
-    </nav>
+        <button data-page="evidence">
+            📷 Evidence
+        </button>
 
-</div>
+        <button data-page="settings">
+            ⚙ Settings
+        </button>
+
+    </aside>
 
 
-<script src="script.js"></script>
+    <main>
 
-</body>
-</html>
+        <!-- ================= HOME ================= -->
+
+        <section id="home" class="page active-page">
+
+            <div class="hero">
+
+                <div class="hero-content">
+
+                    <span class="eyebrow">
+                        ✦ A CALMER RESPONSE WHEN IT MATTERS
+                    </span>
+
+                    <h1>
+                        Your safety is not a single moment.
+                        <br>
+                        It is a system of support.
+                    </h1>
+
+                    <p>
+                        SHE-SHIELD brings immediate safety tools
+                        and AI-assisted stress and trauma assessment
+                        together in one private, professional space.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-logo">
+
+                    <img
+                        src="she-shield-logo.png"
+                        alt="SHE-SHIELD"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="choice-grid">
+
+                <article class="choice-card safety-card">
+
+                    <div class="choice-icon">
+                        🛡
+                    </div>
+
+                    <h2>Immediate Safety</h2>
+
+                    <p>
+                        Need help right now?
+                        Access SOS, location sharing,
+                        emergency calls and safety tools.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        data-page="safety"
+                    >
+                        Get Help →
+                    </button>
+
+                </article>
+
+
+                <article class="choice-card assessment-card">
+
+                    <div class="choice-icon">
+                        🧠
+                    </div>
+
+                    <h2>AI Stress & Trauma Assessment</h2>
+
+                    <p>
+                        Talk or write about what you are experiencing
+                        and receive a supportive risk assessment.
+                    </p>
+
+                    <button
+                        class="secondary-btn"
+                        data-page="assessment"
+                    >
+                        Start Assessment →
+                    </button>
+
+                </article>
+
+            </div>
+
+
+            <div class="feature-strip">
+
+                <div>
+                    <strong>FAST TOOLS</strong>
+                    <span>Emergency assistance</span>
+                </div>
+
+                <div>
+                    <strong>PRIVATE BY DESIGN</strong>
+                    <span>Your responses stay in your browser</span>
+                </div>
+
+                <div>
+                    <strong>MULTILINGUAL</strong>
+                    <span>English • Kannada • Telugu • Tamil • Hindi</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SAFETY ================= -->
+
+        <section id="safety" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    IMMEDIATE SAFETY
+                </span>
+
+                <h1>Emergency Response Center</h1>
+
+                <p>
+                    Choose the safest action for your situation.
+                </p>
+
+            </div>
+
+
+            <div class="safety-layout">
+
+                <!-- SOS -->
+
+                <div class="sos-panel">
+
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        Location Ready
+                    </div>
+
+                    <button id="sosButton" class="sos-button">
+
+                        <span>!</span>
+
+                        <strong>SOS</strong>
+
+                        <small>PRESS & HOLD</small>
+
+                    </button>
+
+                    <p id="sosStatus">
+                        Ready
+                    </p>
+
+
+                    <div class="sos-mini-grid">
+
+                        <button id="silentSos">
+                            🔇
+                            <span>Silent SOS</span>
+                        </button>
+
+                        <button id="autoSos">
+                            ⏱
+                            <span>Auto SOS</span>
+                        </button>
+
+                        <button id="shareLocation">
+                            📍
+                            <span>Share Location</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOOLS -->
+
+                <div class="tools-panel">
+
+                    <div class="tool-card" id="locationTool">
+
+                        <span class="tool-icon">📍</span>
+
+                        <div>
+                            <h3>Live Location</h3>
+                            <p>Get your current location</p>
+                        </div>
+
+                        <button id="locationButton">
+                            →
+                        </button>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <span class="tool-icon">📞</span>
+
+                        <div>
+                            <h3>Emergency Call</h3>
+                            <p>Call an emergency number</p>
+                        </div>
+
+                        <a
+                            href="tel:112"
+                            class="tool-action"
+                        >
+                            →
+                        </a>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <span class="tool-icon">🚗</span>
+
+                        <div>
+                            <h3>Journey Safety</h3>
+                            <p>Track your journey</p>
+                        </div>
+
+                        <button id="journeyButton">
+                            →
+                        </button>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <span class="tool-icon">📷</span>
+
+                        <div>
+                            <h3>Evidence Collection</h3>
+                            <p>Record notes and evidence</p>
+                        </div>
+
+                        <button data-page="evidence">
+                            →
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAFETY TOOLS -->
+
+            <div class="section-title">
+
+                <span>SAFETY TOOLS</span>
+
+                <h2>Additional protection</h2>
+
+            </div>
+
+
+            <div class="safety-tools-grid">
+
+                <button id="sirenButton" class="safety-tool">
+                    🔊
+                    <strong>Siren</strong>
+                    <small>Play emergency siren</small>
+                </button>
+
+
+                <button id="flashButton" class="safety-tool">
+                    💡
+                    <strong>Screen Flash</strong>
+                    <small>Flash screen for attention</small>
+                </button>
+
+
+                <button id="fakeCallButton" class="safety-tool">
+                    📱
+                    <strong>Fake Call</strong>
+                    <small>Simulate an incoming call</small>
+                </button>
+
+
+                <button
+                    class="safety-tool"
+                    data-page="tips"
+                >
+                    💡
+                    <strong>Safety Tips</strong>
+                    <small>Practical safety guidance</small>
+                </button>
+
+            </div>
+
+
+            <!-- TRUSTED CONTACTS -->
+
+            <div class="trusted-panel">
+
+                <div>
+
+                    <span class="eyebrow">
+                        TRUSTED SUPPORT
+                    </span>
+
+                    <h2>Trusted Contacts</h2>
+
+                    <p>
+                        Save people you trust for quick access
+                        during an emergency.
+                    </p>
+
+                </div>
+
+                <button
+                    class="gold-btn"
+                    data-page="contacts"
+                >
+                    Manage Contacts
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ASSESSMENT ================= -->
+
+        <section id="assessment" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    AI STRESS & TRAUMA ASSESSMENT
+                </span>
+
+                <h1>
+                    You can start by telling us what you're experiencing.
+                </h1>
+
+                <p>
+                    This is a supportive screening tool, not a medical diagnosis.
+                </p>
+
+            </div>
+
+
+            <div class="assessment-layout">
+
+                <div class="assessment-card">
+
+                    <div class="assessment-tabs">
+
+                        <button
+                            id="textMode"
+                            class="active-tab"
+                        >
+                            Text
+                        </button>
+
+                        <button id="voiceMode">
+                            Voice
+                        </button>
+
+                    </div>
+
+
+                    <label for="assessmentText">
+                        Tell us what you are experiencing...
+                    </label>
+
+                    <textarea
+                        id="assessmentText"
+                        placeholder="Write your thoughts, feelings or situation here..."
+                    ></textarea>
+
+
+                    <button
+                        id="voiceButton"
+                        class="voice-button"
+                    >
+                        🎙
+                    </button>
+
+
+                    <button
+                        id="analyzeButton"
+                        class="primary-btn analyze-btn"
+                    >
+                        Analyze with AI →
+                    </button>
+
+
+                    <small class="privacy-note">
+                        🔒 Your response is processed locally for this demo.
+                    </small>
+
+                </div>
+
+
+                <!-- RESULT -->
+
+                <div
+                    id="assessmentResult"
+                    class="assessment-result hidden"
+                >
+
+                    <div class="score-circle">
+
+                        <strong id="scoreValue">
+                            0
+                        </strong>
+
+                        <span>/100</span>
+
+                    </div>
+
+                    <h2 id="riskLabel">
+                        Assessment Result
+                    </h2>
+
+                    <p id="riskDescription"></p>
+
+                    <div class="recommendations">
+
+                        <h3>Recommended Support</h3>
+
+                        <div class="recommendation-grid">
+
+                            <div>🤝 Counselling</div>
+                            <div>⚖ Legal Aid</div>
+                            <div>🏥 Medical Support</div>
+                            <div>🆘 Emergency Help</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= INCIDENTS ================= -->
+
+        <section id="incidents" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    INCIDENT MANAGEMENT
+                </span>
+
+                <h1>Your Incident Records</h1>
+
+            </div>
+
+            <div id="incidentList" class="empty-state">
+
+                <div>📋</div>
+
+                <h2>No incidents recorded</h2>
+
+                <p>
+                    Emergency events will appear here during this session.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CONTACTS ================= -->
+
+        <section id="contacts" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    TRUSTED SUPPORT
+                </span>
+
+                <h1>Trusted Contacts</h1>
+
+            </div>
+
+
+            <div class="contact-form">
+
+                <input
+                    id="contactName"
+                    type="text"
+                    placeholder="Contact name"
+                >
+
+                <input
+                    id="contactPhone"
+                    type="tel"
+                    placeholder="Phone number"
+                >
+
+                <button
+                    id="addContact"
+                    class="gold-btn"
+                >
+                    Add Contact
+                </button>
+
+            </div>
+
+
+            <div id="contactsList" class="contacts-list"></div>
+
+        </section>
+
+
+        <!-- ================= EVIDENCE ================= -->
+
+        <section id="evidence" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    SECURE EVIDENCE
+                </span>
+
+                <h1>Evidence Collection</h1>
+
+                <p>
+                    Store notes for the current browser session.
+                </p>
+
+            </div>
+
+
+            <div class="evidence-card">
+
+                <textarea
+                    id="evidenceNotes"
+                    placeholder="Write incident notes here..."
+                ></textarea>
+
+                <button
+                    id="saveEvidence"
+                    class="gold-btn"
+                >
+                    Save Evidence Note
+                </button>
+
+                <div id="evidenceList"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TIPS ================= -->
+
+        <section id="tips" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    SAFETY GUIDANCE
+                </span>
+
+                <h1>Safety Tips</h1>
+
+            </div>
+
+
+            <div class="tips-grid">
+
+                <article>
+                    <span>01</span>
+                    <h3>Move to a safer place</h3>
+                    <p>
+                        If possible, move toward a public,
+                        well-lit location.
+                    </p>
+                </article>
+
+                <article>
+                    <span>02</span>
+                    <h3>Contact someone you trust</h3>
+                    <p>
+                        Let a trusted person know where you are.
+                    </p>
+                </article>
+
+                <article>
+                    <span>03</span>
+                    <h3>Keep your phone accessible</h3>
+                    <p>
+                        Keep emergency communication available.
+                    </p>
+                </article>
+
+                <article>
+                    <span>04</span>
+                    <h3>Use emergency services</h3>
+                    <p>
+                        If there is immediate danger, contact
+                        appropriate emergency services.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SETTINGS ================= -->
+
+        <section id="settings" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">
+                    SETTINGS
+                </span>
+
+                <h1>Privacy & Preferences</h1>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div>
+                    <h3>Selected Language</h3>
+                    <p id="currentLanguage">
+                        English
+                    </p>
